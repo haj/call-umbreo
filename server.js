@@ -28,7 +28,7 @@ var server = httpServer.listen(9000, '0.0.0.0', () => {
 
 var securedServer = httpsServer.listen(port, host, () => {
     console.log(`Server Started at https://${host}:${port}`)
-});
+})
 
 app.use('/peerjs', ExpressPeerServer(server, {
     debug: true
@@ -36,7 +36,7 @@ app.use('/peerjs', ExpressPeerServer(server, {
 
 app.use('/peerjs', ExpressPeerServer(securedServer, {
     debug: false
-}));
+}))
 
 app.get('/\:id\?', (req, res) => {
     res.render('index', {id: req.params.id})
