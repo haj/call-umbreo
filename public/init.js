@@ -10,6 +10,7 @@ var dataConnection = null
 var vendorUrl = window.URL || window.webkitURL;
 var me = document.getElementById('me');
 me.controls = false;
+me.muted = true;
 var partner = document.getElementById('partner');
 partner.controls = false;
 
