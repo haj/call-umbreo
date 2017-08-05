@@ -22,19 +22,9 @@ var secureCredentials = {
 var httpServer = http.createServer(app)
 var httpsServer = https.createServer(secureCredentials, app)
 
-if(app.get('env') === 'development'){
-    
-    var server = httpServer.listen(port, host, () => {
-        console.log(`Server Started at http://${host}:${port}`)
-    });
-
-} else if(app.get('env') === 'production'){
-
-    var securedServer = httpsServer.listen(443, host, () => {
-        console.log(`Secure Server Started at http://${host}:${port}`)
-    });
-    
-}
+var server = httpServer.listen(port, host, () => {
+    console.log(`Server Started at http://${host}:${port}`)
+});
 
 app.use('/peerjs', ExpressPeerServer(server, {
     debug: true
