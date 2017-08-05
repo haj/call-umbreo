@@ -5,7 +5,7 @@ var app = express()
 var ExpressPeerServer = require('peer').ExpressPeerServer;
 
 const port = 9000
-const host = 'localhost'
+const host = process.env.HOSTNAME
 
 app.set('views', __dirname + '/views')
 app.set('view engine', 'ejs')
