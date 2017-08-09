@@ -20,7 +20,7 @@ primaryVideo.muted = true
 var me = {}
 var peers = {}
 
-init()
+init();
 
 function init() {
   if (!navigator.getUserMedia) return unsupported()
@@ -69,7 +69,7 @@ function init_peer(cb){
         console.log('Answering a new call...')
         mediaConnection = call
         call.answer(window.localStream)
-        processCall(call)
+        processCall(me, call)
     })
 
     me.on('error', (err) => {
@@ -88,6 +88,24 @@ function init_peer(cb){
     })
 }
 
+function processCall(peer, call){
+    call.on('stream', function(stream) {
+		display(`Connected to ${peer.id}`)
+		addIncomingStream(peer, stream)
+    })
+
+    call.on('close', function(what){
+        console.log(`call closed : ${call.peer}`)
+        $(`#videos #${call.peer}`).remove()
+        unregisterIdWithServer(call.peer)
+    })
+
+    call.on('error', (err) => {
+		console.log(err)
+		display(err)
+    })
+}
+
 $(function(){
 	$mute_btn.click(() => {
 		window.localStream.getAudioTracks()[0].enabled = !(window.localStream.getAudioTracks()[0].enabled);
@@ -98,35 +116,15 @@ $(function(){
 	})
 
 	$endcall_btn.click(function() {
-		endCall()
+		// endCall()
 	})
 })
-
-// function callPeers() {
-// 	console.log('call peers')
-// 	console.log(peers)
-// 	for (var peer in peers) {
-// 		if (peers.hasOwnProperty(peer)) {
-// 			var peer = peers[peer]
-// 			callPeer(peer.id)
-// 			console.log(peer)
-// 		}
-// 	}
-// }
 
 function callPeer(peerId) {
   display(`Calling ${peerId} ...`);
   var peer = getPeer(peerId)
   peer.outgoing = me.call(peerId, window.localStream)
-  
-  peer.outgoing.on('error', function(err) {
-    display(err);
-  })
-
-  peer.outgoing.on('stream', function(stream) {
-    display('Connected to ' + peerId + '.')
-    addIncomingStream(peer, stream)
-  })
+  processCall(peer, peer.outgoing)
 }
 
 function addIncomingStream(peer, stream) {
