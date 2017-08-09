@@ -1,16 +1,23 @@
-// function publishNews(new_peer) {
-//     console.log(`Publish data about ${new_peer}`);
-//     if(me.connections) {
 
-//         if(Object.keys(me.connections).length >= 1){
-//             for (var key in me.connections) {
-//                 if (me.connections.hasOwnProperty(key)) {
-//                     var element = me.connections[key]
-//                     var d = element[0]
-//                     var m = element[1]
-//                 }
-//             }
-//         }
 
-//     }
-// }
+
+$(function() {
+    console.log('ready!')
+})
+
+function rearrangeVideos() {
+
+    if($.trim($('#primary_video_container').html()) == ''){
+        console.log('moving...')
+        $(`#${me.id}`).detach().appendTo('#primary_video_container')
+        $(`#${me.id}`)[0].width = '400'
+        $(`#${me.id}`)[0].height = '300'
+        $(`#${me.id}`).unbind('click')
+    }
+
+    // $(`#${me.id}`)[0].muted = true
+    $.each($(`video[id!='${me.id}']`), (i, val) => {
+        // val.load()
+        // val.muted = false
+    })
+}

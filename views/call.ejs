@@ -8,21 +8,19 @@
     </head>
     <body>
         <h2>Umbreo Call app</h2>
-        <p>Your Call ID : <stron><span id="yourpid"></span></strong></p>
-        <p>Join another Call : 
-            <input id="callpid" name="callpid" type="input" placeholder="Someone else's ID" />
-            <input type="button" id="join" value="Join!!"/>
-        </p>
-        <video id="primary_video" width="400" height="300" controls="false" autoplay></video>
+        <br>
+        <div id="primary_video_container">
+            <video width="400" height="300" controls="false" autoplay></video>    
+        </div>
         <div id="videos">
+            <!-- Other videos -->
         </div>
         <br>
         <div>
-            <input type="button" id="camera" value="camera">
-            <input type="button" id="mute" value="mute">
-            <input type="button" id="endcall" value="End Call">
+            <input type="button" id="camera" value="Camera">
+            <input type="button" id="mute" value="Mute">
+            <input type="button" id="sharescreen" value="Share Screen">
         </div>
-
         <br>
         <hr>
         <br>
@@ -32,10 +30,11 @@
         </div>
         
         <script type="text/javascript">
-            window.call = <%- JSON.stringify(call, null, 2) %>;    
+            window.call = <%- JSON.stringify(call, null, 2) %>;
         </script>
         <script src="/assets/jquery.js" type="text/javascript"></script>        
         <script src="/assets/peer.js" type="text/javascript"></script>  
+        <script src="/assets/main.js" type="text/javascript"></script>
         <script src="/assets/app.js" type="text/javascript"></script>        
     </body>
 </html>

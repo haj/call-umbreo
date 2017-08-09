@@ -28,4 +28,8 @@ router.post('/:id/removepeer/:peerid', (req, res) => {
     res.json(call.toJSON())
 })
 
+router.post('/', (req, res) => {
+    res.redirect(`/${req.body.room_name}`)
+})
+
 module.exports = router

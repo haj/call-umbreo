@@ -6,3 +6,7 @@
 body {
     padding: 10px;
 }
+
+#videos video {
+    cursor: pointer;
+}
