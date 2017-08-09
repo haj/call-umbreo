@@ -4,6 +4,7 @@ var https = require('https')
 var express = require('express')
 var fs = require('fs')
 var app = express()
+var routes = require('./routes')
 var ExpressPeerServer = require('peer').ExpressPeerServer
 
 const port = process.env.CU_PORT
@@ -30,14 +31,23 @@ var securedServer = httpsServer.listen(port, host, () => {
     console.log(`Server Started at https://${host}:${port}`)
 })
 
+server.on('connection', function(id) { 
+    // console.log(id)
+})
+
+server.on('disconnect', function(id) { 
+    // console.log(`peer disconnect : ${id.peer}`) 
+})
+
 app.use('/peerjs', ExpressPeerServer(server, {
-    debug: true
+    debug: true,
+    allow_discovery: true
 }))
 
 app.use('/peerjs', ExpressPeerServer(securedServer, {
-    debug: false
+    debug: false,
+    allow_discovery: true    
 }))
 
-app.get('/\:id\?', (req, res) => {
-    res.render('index', {id: req.params.id})
-})
+
+app.use('/', routes)
