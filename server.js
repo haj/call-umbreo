@@ -23,26 +23,18 @@ var ssl = {
 var httpServer = http.createServer(app)
 var httpsServer = https.createServer(ssl, app)
 
-var server = httpServer.listen(9000, '0.0.0.0', () => {
-    console.log(`Server Started at http://0.0.0.0:9000`)
-})
+// var server = httpServer.listen(9000, '0.0.0.0', () => {
+//     console.log(`Server Started at http://0.0.0.0:9000`)
+// })
 
 var securedServer = httpsServer.listen(port, host, () => {
     console.log(`Server Started at https://${host}:${port}`)
 })
 
-server.on('connection', function(id) { 
-    // console.log(id)
-})
-
-server.on('disconnect', function(id) { 
-    // console.log(`peer disconnect : ${id.peer}`) 
-})
-
-app.use('/peerjs', ExpressPeerServer(server, {
-    debug: true,
-    allow_discovery: true
-}))
+// app.use('/peerjs', ExpressPeerServer(server, {
+//     debug: true,
+//     allow_discovery: true
+// }))
 
 app.use('/peerjs', ExpressPeerServer(securedServer, {
     debug: false,
