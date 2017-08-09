@@ -20,9 +20,7 @@ primaryVideo.muted = true
 var me = {}
 var peers = {}
 
-init();
-
-function init() {
+$(function (){
   if (!navigator.getUserMedia) return unsupported()
 
   getLocalAudioStream(function(err, stream) {
@@ -40,7 +38,7 @@ function init() {
 			if(!peers.length) displayShareMessage()
 		})
 	})
-}
+})
 
 function init_peer(cb){
     me = new Peer(peerServerPayload)
