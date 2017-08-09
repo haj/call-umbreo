@@ -218,7 +218,7 @@ function getLocalAudioStream(cb) {
 	navigator.getUserMedia({audio: true, video: true}, function(stream){
     window.localStream = stream
 		primaryVideo.attr('src', vendorUrl.createObjectURL(stream))
-		// primaryVideo.attr('muted', true)
+		primaryVideo.attr('muted', true)
 		if(cb) cb(null, stream)
 	}, function(error){
 		alert("Error! Make sure to click allow when asked for permission by the browser")
