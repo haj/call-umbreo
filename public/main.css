@@ -1,4 +1,4 @@
-*{
+* {
     margin: 0px;
     padding: 0px;
 }
@@ -9,4 +9,14 @@ body {
 
 #videos video {
     cursor: pointer;
+}
+
+#chat_url {
+    padding: 2px;
+    font-size: 16px;
+    width: 100%;
+}
+
+#room_name {
+    font-size: 16px;
 }

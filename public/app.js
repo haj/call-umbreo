@@ -24,14 +24,11 @@ $(function (){
 
   getLocalAudioStream(function(err, stream) {
     if (err || !stream) return
-
 		init_peer(function(err, me) {
-
 			if(err) return
 			registerIdWithServer()
 			call.peers.forEach((peer) => {
 				callPeerIfExist(peer, function(err, conn){
-
 				})
 			})
 			if(!peers.length) displayShareMessage()
@@ -39,7 +36,7 @@ $(function (){
 	})
 })
 
-function init_peer(cb){
+function init_peer(cb) {
     me = new Peer(peerServerPayload)
 
     me.on('open', function(peer_id) {
@@ -49,13 +46,13 @@ function init_peer(cb){
 			cb && cb(null, me)
     })
 
-    me.on('connection', function(data){
+    me.on('connection', function(data) {
         console.log(data);
         dataConnection = data
         console.log('connected!')
     })
 
-    me.on('close', function(what){
+    me.on('close', function(what) {
         unregisterIdWithServer(me.id)
     })
 
@@ -86,7 +83,7 @@ function init_peer(cb){
     })
 }
 
-function processCall(call){
+function processCall(call) {
     call.on('stream', function(stream) {
 			display(`Connected to ${call.peer}`)
 			addIncomingStream(call, stream)
@@ -105,17 +102,17 @@ function processCall(call){
     })
 }
 
-$(function(){
+$(function() {
 	$mute_btn.click(() => {
 		window.localStream.getAudioTracks()[0].enabled = !(window.localStream.getAudioTracks()[0].enabled)
-		if(window.localStream.getAudioTracks()[0].enabled)
-			$mute_btn.val() == 'mute'
-		else
-			$mute_btn.val() == 'unmute'
+		if(window.localStream.getAudioTracks()[0].enabled) $mute_btn.attr('value', 'Mute')
+		else $mute_btn.attr('value', 'Unmute')
 	})
 
 	$camera_btn.click(() => {
 		window.localStream.getVideoTracks()[0].enabled = !(window.localStream.getVideoTracks()[0].enabled)
+		if(window.localStream.getVideoTracks()[0].enabled) $camera_btn.attr('value', 'Hide Camera')
+		else $camera_btn.attr('value', 'Show Camera')
 	})
 
 	$join_btn.click(() => {
@@ -141,22 +138,25 @@ function addIncomingStream(call, stream) {
   playStream(stream, call.peer)
 }
 
+var miniVideoClickEvent = (e) => {
+		var primary = $('#primary_video_container video')[0]
+		$(primary).detach().appendTo('#videos')
+		$(primary).attr('width', '200')
+		$(primary).attr('height', '200')
+		$(primary).bind('click', miniVideoClickEvent)
+		primary.load()
+		$(e.target).detach().appendTo('#primary_video_container')
+		$(e.target).attr('width', '400')
+		$(e.target).attr('height', '300')
+		$(e.target).unbind('click')
+		e.target.load()
+}
+
 function playStream(stream, call_peer) {
   var video = $(`<video width='200' height='200' autoplay />`).appendTo('#videos');
   video[0].src = vendorUrl.createObjectURL(stream)
 	video[0].id = call_peer
-	$(video).click(() => {
-		var id = video[0].id
-		var src = video[0].src
-		var primary = $('#primary_video_container video')[0]
-		video[0].src = primary.src
-		video[0].id = primary.id
-		primary.id = id
-		primary.src = src
-		rearrangeVideos()
-		// primary.load()
-		// video[0].load()
-	})		
+	video.bind('click', miniVideoClickEvent)
 }
 
 function getPeer(peerId) {
@@ -186,6 +186,7 @@ function callPeerIfExist(peer, cb) {
 	conn.on('close', () => {
 		console.log(`Close event while trying to connect to ${peer}`)
 		$(`#${peer}`).remove()
+		rearrangeVideos()
 	})
 }
 
@@ -194,7 +195,7 @@ function cleanServerPeers() {
 	$(call.peers).not(Object.keys(peers)).get().forEach(function(element) {
 		console.log(element)
 		unregisterIdWithServer(element)
-	}, this);
+	}, this)
 }
 
 function unsupported() {
@@ -202,12 +203,11 @@ function unsupported() {
 }
 
 function displayShareMessage() {
-  display('Give someone this URL to chat.');
-  display(`<input type='text' value='${location.href}' readonly>`);
-  
+  display('Give someone this URL to talk');
+  display(`<input type='text' id='chat_url' value='${location.href}' readonly></br></br>`)
   $('#display input').click(function() {
-    this.select();
-  });
+    this.select()
+  })
 }
 
 function display(message) {
@@ -225,42 +225,3 @@ function getLocalAudioStream(cb) {
 		if(cb) cb(error)
 	})
 }
-
-// var ConnectToExistingPeer = new Promise((resolve, reject) => {
-//     // var call_id = $('input#callpid').val()
-//     console.log('Attempt to connect to an existing peer...')    
-//     console.log(`Connecting to peer : ${peer_id}`)
-
-//     init_peer()
-//     dataConnection = me.connect(peer_id)
-
-//     dataConnection.on('open', () => {
-//         console.log('dataConnection.open');
-//         resolve(dataConnection)
-//     })
-
-//     dataConnection.on('error', (err) => {
-//         console.log('error during connection!');
-//     })
-
-//     dataConnection.on('close', () => {
-//         if(Object.keys(me.connections).length <= 1){
-//             me = {}
-//             init_peer(peer_id)
-//         } else {
-
-//         }
-//         console.log('connection closed from the other side!');
-//     })
-
-//     dataConnection.on('data', function(data) {
-//         console.log('New peer detected')
-//         console.log(data)
-//         // if(data.constructor == MediaConnection){
-//             // console.log(`New peer detected ${data.peer}`)
-//             // console.log(`Stream : ${data.remoteStream}`)
-//         // }
-//     })
-
-//     // console.log(dataConnection)
-// })
